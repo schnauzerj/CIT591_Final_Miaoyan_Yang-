@@ -1,3 +1,4 @@
+
 /**
  * This class manages the game state by keeping track of what entity is
  * contained in each position on the game board.
@@ -5,6 +6,8 @@
  * @author harry
  *
  */
+import java.util.Random;
+
 public class Ocean implements OceanInterface {
 
 	/**
@@ -37,7 +40,14 @@ public class Ocean implements OceanInterface {
 	 * appropriately.
 	 */
 	public Ocean() {
-
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				this.ships[i][j] = new EmptySea();
+			}
+		}
+		shotsFired = 0;
+		hitCount = 0;
+		shipsSunk = 0;
 	}
 
 	/**
@@ -48,6 +58,78 @@ public class Ocean implements OceanInterface {
 	 * @see java.util.Random
 	 */
 	public void placeAllShipsRandomly() {
+
+		int putCount = 0;
+		Random random = new Random();
+
+		while (putCount < 1) {
+			Battleship battleship = new Battleship();
+			int row = (int) random.nextDouble() * 10;
+			int col = (int) random.nextDouble() * 10;
+			boolean isHorizontal;
+			if (random.nextDouble() <= 0.5) {
+				isHorizontal = true;
+			} else {
+				isHorizontal = false;
+			}
+			if (battleship.okToPlaceShipAt(row, col, isHorizontal, this)) {
+				battleship.placeShipAt(row, col, isHorizontal, this);
+				putCount += 1;
+			}
+			;
+		}
+
+		while (putCount <= 2) {
+			Cruiser cruiser = new Cruiser();
+			int row = (int) random.nextDouble() * 10;
+			int col = (int) random.nextDouble() * 10;
+			boolean isHorizontal;
+			if (random.nextDouble() <= 0.5) {
+				isHorizontal = true;
+			} else {
+				isHorizontal = false;
+			}
+			if (cruiser.okToPlaceShipAt(row, col, isHorizontal, this)) {
+				cruiser.placeShipAt(row, col, isHorizontal, this);
+				putCount += 1;
+			}
+			;
+		}
+
+		while (putCount <= 5) {
+			Destroyer destroyer = new Destroyer();
+			int row = (int) random.nextDouble() * 10;
+			int col = (int) random.nextDouble() * 10;
+			boolean isHorizontal;
+			if (random.nextDouble() <= 0.5) {
+				isHorizontal = true;
+			} else {
+				isHorizontal = false;
+			}
+			if (destroyer.okToPlaceShipAt(row, col, isHorizontal, this)) {
+				destroyer.placeShipAt(row, col, isHorizontal, this);
+				putCount += 1;
+			}
+			;
+		}
+
+		while (putCount <= 9) {
+			Submarine submarine = new Submarine();
+
+			int row = (int) random.nextDouble() * 10;
+			int col = (int) random.nextDouble() * 10;
+			boolean isHorizontal;
+			if (random.nextDouble() <= 0.5) {
+				isHorizontal = true;
+			} else {
+				isHorizontal = false;
+			}
+			if (submarine.okToPlaceShipAt(row, col, isHorizontal, this)) {
+				submarine.placeShipAt(row, col, isHorizontal, this);
+				putCount += 1;
+			}
+			;
+		}
 
 	}
 
@@ -61,7 +143,12 @@ public class Ocean implements OceanInterface {
 	 *         {@literal false} otherwise.
 	 */
 	public boolean isOccupied(int row, int column) {
-		return false;
+		String type = this.ships[row][column].getShipType();
+		if (type == "EmptySea") {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -77,7 +164,18 @@ public class Ocean implements OceanInterface {
 	 *         EmptySea), {@literal false} if it does not.
 	 */
 	public boolean shootAt(int row, int column) {
-		return false;
+		shotsFired += 1;
+		Ship curNode = this.ships[row][column];
+		if (curNode.getShipType() != "EmptySea" && curNode.isSunk() == false) {
+			curNode.shootAt(row, column);
+			hitCount += 1;
+			if (curNode.isSunk() == true) {
+				this.shipsSunk += 1;
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -106,7 +204,11 @@ public class Ocean implements OceanInterface {
 	 *         {@literal false}.
 	 */
 	public boolean isGameOver() {
-		return false;
+		if (this.shipsSunk == 10) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -119,7 +221,7 @@ public class Ocean implements OceanInterface {
 	 * @return the 10x10 array of ships.
 	 */
 	public Ship[][] getShipArray() {
-		return null;
+		return this.ships;
 	}
 
 	/**
