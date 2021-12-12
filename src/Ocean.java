@@ -34,6 +34,8 @@ public class Ocean implements OceanInterface {
 	 */
 	protected int shipsSunk;
 
+	protected String[][] grid;
+
 	/**
 	 * Creates an "empty" ocean, filling every space in the <code>ships</code> array
 	 * with EmptySea objects. Should also initialize the other instance variables
