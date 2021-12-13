@@ -191,7 +191,7 @@ public class Ocean implements OceanInterface {
 	 * @return the number of hits recorded in this game.
 	 */
 	public int getHitCount() {
-		return this.shotsFired;
+		return this.hitCount;
 	}
 
 	/**
