@@ -102,8 +102,6 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (cruiser.okToPlaceShipAt(row, col, isHorizontal, this)) {
-
-//				System.out.println("Cruiser " + row + " " + col);
 				cruiser.setBowRow(row);
 				cruiser.setBowColumn(col);
 				cruiser.setHorizontal(isHorizontal);
