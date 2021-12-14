@@ -34,7 +34,7 @@ public class Ocean implements OceanInterface {
 	 */
 	protected int shipsSunk;
 
-	protected String[][] grid;
+	protected int[][] grid;
 
 	/**
 	 * Creates an "empty" ocean, filling every space in the <code>ships</code> array
@@ -42,6 +42,7 @@ public class Ocean implements OceanInterface {
 	 * appropriately.
 	 */
 	public Ocean() {
+		this.ships = new Ship[10][10];
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				this.ships[i][j] = new EmptySea();
@@ -50,6 +51,12 @@ public class Ocean implements OceanInterface {
 		shotsFired = 0;
 		hitCount = 0;
 		shipsSunk = 0;
+		this.grid = new int[10][10];
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				grid[i][j] = 0;
+			}
+		}
 	}
 
 	/**
@@ -63,11 +70,10 @@ public class Ocean implements OceanInterface {
 
 		int putCount = 0;
 		Random random = new Random();
-
 		while (putCount < 1) {
 			Battleship battleship = new Battleship();
-			int row = (int) random.nextDouble() * 10;
-			int col = (int) random.nextDouble() * 10;
+			int row = (int) (random.nextDouble() * 10);
+			int col = (int) (random.nextDouble() * 10);
 			boolean isHorizontal;
 			if (random.nextDouble() <= 0.5) {
 				isHorizontal = true;
@@ -75,16 +81,20 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (battleship.okToPlaceShipAt(row, col, isHorizontal, this)) {
+//				System.out.println("Battleship " + row + " " + col);
+				battleship.setBowRow(row);
+				battleship.setBowColumn(col);
+				battleship.setHorizontal(isHorizontal);
+
 				battleship.placeShipAt(row, col, isHorizontal, this);
 				putCount += 1;
 			}
-			;
 		}
 
 		while (putCount <= 2) {
 			Cruiser cruiser = new Cruiser();
-			int row = (int) random.nextDouble() * 10;
-			int col = (int) random.nextDouble() * 10;
+			int row = (int) (random.nextDouble() * 10);
+			int col = (int) (random.nextDouble() * 10);
 			boolean isHorizontal;
 			if (random.nextDouble() <= 0.5) {
 				isHorizontal = true;
@@ -92,16 +102,21 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (cruiser.okToPlaceShipAt(row, col, isHorizontal, this)) {
+
+//				System.out.println("Cruiser " + row + " " + col);
+				cruiser.setBowRow(row);
+				cruiser.setBowColumn(col);
+				cruiser.setHorizontal(isHorizontal);
+
 				cruiser.placeShipAt(row, col, isHorizontal, this);
 				putCount += 1;
 			}
-			;
 		}
 
 		while (putCount <= 5) {
 			Destroyer destroyer = new Destroyer();
-			int row = (int) random.nextDouble() * 10;
-			int col = (int) random.nextDouble() * 10;
+			int row = (int) (random.nextDouble() * 10);
+			int col = (int) (random.nextDouble() * 10);
 			boolean isHorizontal;
 			if (random.nextDouble() <= 0.5) {
 				isHorizontal = true;
@@ -109,17 +124,21 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (destroyer.okToPlaceShipAt(row, col, isHorizontal, this)) {
+//				System.out.println("Destroyer " + row + " " + col);
+				destroyer.setBowRow(row);
+				destroyer.setBowColumn(col);
+				destroyer.setHorizontal(isHorizontal);
+
 				destroyer.placeShipAt(row, col, isHorizontal, this);
 				putCount += 1;
 			}
-			;
 		}
 
 		while (putCount <= 9) {
 			Submarine submarine = new Submarine();
 
-			int row = (int) random.nextDouble() * 10;
-			int col = (int) random.nextDouble() * 10;
+			int row = (int) (random.nextDouble() * 10);
+			int col = (int) (random.nextDouble() * 10);
 			boolean isHorizontal;
 			if (random.nextDouble() <= 0.5) {
 				isHorizontal = true;
@@ -127,10 +146,14 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (submarine.okToPlaceShipAt(row, col, isHorizontal, this)) {
+//				System.out.println("Submarine " + row + " " + col);
+				submarine.setBowRow(row);
+				submarine.setBowColumn(col);
+				submarine.setHorizontal(isHorizontal);
+
 				submarine.placeShipAt(row, col, isHorizontal, this);
 				putCount += 1;
 			}
-			;
 		}
 
 	}
@@ -146,7 +169,7 @@ public class Ocean implements OceanInterface {
 	 */
 	public boolean isOccupied(int row, int column) {
 		String type = this.ships[row][column].getShipType();
-		if (type == "EmptySea") {
+		if (type == "empty") {
 			return false;
 		} else {
 			return true;
@@ -168,7 +191,8 @@ public class Ocean implements OceanInterface {
 	public boolean shootAt(int row, int column) {
 		shotsFired += 1;
 		Ship curNode = this.ships[row][column];
-		if (curNode.getShipType() != "EmptySea" && curNode.isSunk() == false) {
+		grid[row][column] = 1; // mark this tile as 1: has been fired
+		if (curNode.getShipType() != "empty" && curNode.isSunk() == false) {
 			curNode.shootAt(row, column);
 			hitCount += 1;
 			if (curNode.isSunk() == true) {
@@ -247,6 +271,32 @@ public class Ocean implements OceanInterface {
 	 * 
 	 */
 	public void print() {
+		System.out.println("  0 1 2 3 4 5 6 7 8 9");
+		for (int i = 0; i <= 9; i++) {
+			System.out.print(i + " ");
+			for (int j = 0; j <= 9; j++) {
+				if (grid[i][j] == 0) {
+					System.out.print(". ");
+				} else {
+					System.out.print(this.ships[i][j].toString() + " ");
+				}
+			}
+			System.out.print("\n");
+		}
+
+	}
+
+	public void print2() {
+		System.out.println("  0 1 2 3 4 5 6 7 8 9");
+		for (int i = 0; i <= 9; i++) {
+			System.out.print(i + " ");
+			for (int j = 0; j <= 9; j++) {
+
+				System.out.print(this.ships[i][j].toString() + " ");
+
+			}
+			System.out.print("\n");
+		}
 
 	}
 

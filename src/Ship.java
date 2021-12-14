@@ -30,6 +30,7 @@ public abstract class Ship extends Object {
 				return false;
 			}
 		}
+		// if hit[] contains all true
 		return true;
 	}
 
@@ -45,17 +46,29 @@ public abstract class Ship extends Object {
 		if (horizontal == true) {
 			for (int i = -1; i <= len; i++) {
 				for (int j = -1; j <= 1; j++) {
-					if (ocean.isOccupied(row, column)) {
+					if (i < len && column + i > 9) { // the end of the ship doesn't go out of boundary
 						return false;
 					}
+					if (row + j >= 0 && row + j <= 9 && column + i >= 0 && column + i <= 9) { // verify the boundary
+						if (ocean.isOccupied(row + j, column + i)) {
+							return false;
+						}
+					}
+
 				}
 			}
 		} else if (horizontal == false) {
 			for (int i = -1; i <= len; i++) {
 				for (int j = -1; j <= 1; j++) {
-					if (ocean.isOccupied(row, column)) {
+					if (i < len && row + i > 9) { // the end of the ship doesn't go out of boundary
 						return false;
 					}
+					if (row + i >= 0 && row + i <= 9 && column + j >= 0 && column + j <= 9) {
+						if (ocean.isOccupied(row + i, column + j)) {
+							return false;
+						}
+					}
+
 				}
 			}
 		}
@@ -76,7 +89,7 @@ public abstract class Ship extends Object {
 			for (int i = 0; i < len; i++) {
 				shipArray[row][column + i] = this;
 			}
-		} else if (horizontal == true) {
+		} else {
 			for (int i = 0; i < len; i++) {
 				shipArray[row + i][column] = this;
 			}
@@ -105,7 +118,8 @@ public abstract class Ship extends Object {
 		int len = this.getLength();
 		if (this.horizontal == true) {
 			if ((bowR == row) && (column >= bowC) && (column <= bowC + len - 1)) {
-				if (this.isSunk() == false) {
+//				if (this.isSunk() == false) 
+				{
 					// change the first "false" in hit[] into "true"
 					for (int i = 0; i < this.hit.length; i++) {
 						if (this.hit[i] == false) {
@@ -117,8 +131,10 @@ public abstract class Ship extends Object {
 
 			}
 		} else if (this.horizontal == false) {
+
 			if ((bowC == column) && (row >= bowR) && (row <= bowR + len - 1)) {
-				if (this.isSunk() == false) {
+//				if (this.isSunk() == false) 
+				{
 					for (int i = 0; i < this.hit.length; i++) {
 						if (this.hit[i] == false) {
 							this.hit[i] = true;
@@ -140,12 +156,16 @@ public abstract class Ship extends Object {
 	// it should not be used to print locations that have not been the target of a
 	// shot yet.
 
-	public String toString() {
+	public String toString() { // when a cell is hit
 		if (this.isSunk() == true) {
 			return ("x");
 		} else {
 			return ("S");
 		}
+	}
+
+	public boolean[] getHit() { // when a cell is hit
+		return this.hit;
 	}
 
 }
