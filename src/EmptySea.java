@@ -1,10 +1,19 @@
 
 public class EmptySea extends Ship {
+
+	/**
+	 * Initialize a EmptySea with length = 1 and 1 hit.
+	 */
 	public EmptySea() {
 		this.length = 1;
 		this.hit = new boolean[] { false };
 	}
 
+	/**
+	 * Get the shipType of EmptySea.
+	 * 
+	 * @return "empty", indicating that this is a EmptySea.
+	 */
 	public String getShipType() {
 		return ("empty");
 	}

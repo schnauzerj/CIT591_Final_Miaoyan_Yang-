@@ -34,6 +34,10 @@ public class Ocean implements OceanInterface {
 	 */
 	protected int shipsSunk;
 
+	/**
+	 * A 10x10 2D array of integer value 1 or 0. 1 means this location has been
+	 * shot. 0 means this location has not been shot yet.
+	 */
 	protected int[][] grid;
 
 	/**
@@ -81,7 +85,6 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (battleship.okToPlaceShipAt(row, col, isHorizontal, this)) {
-//				System.out.println("Battleship " + row + " " + col);
 				battleship.setBowRow(row);
 				battleship.setBowColumn(col);
 				battleship.setHorizontal(isHorizontal);
@@ -102,8 +105,6 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (cruiser.okToPlaceShipAt(row, col, isHorizontal, this)) {
-
-//				System.out.println("Cruiser " + row + " " + col);
 				cruiser.setBowRow(row);
 				cruiser.setBowColumn(col);
 				cruiser.setHorizontal(isHorizontal);
@@ -124,7 +125,6 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (destroyer.okToPlaceShipAt(row, col, isHorizontal, this)) {
-//				System.out.println("Destroyer " + row + " " + col);
 				destroyer.setBowRow(row);
 				destroyer.setBowColumn(col);
 				destroyer.setHorizontal(isHorizontal);
@@ -146,7 +146,6 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (submarine.okToPlaceShipAt(row, col, isHorizontal, this)) {
-//				System.out.println("Submarine " + row + " " + col);
 				submarine.setBowRow(row);
 				submarine.setBowColumn(col);
 				submarine.setHorizontal(isHorizontal);
@@ -243,7 +242,7 @@ public class Ocean implements OceanInterface {
 	 * Provides access to the grid of ships in this Ocean. The methods in the Ship
 	 * class that take an Ocean parameter must be able to read and even modify the
 	 * contents of this array. While it is generally undesirable to allow methods in
-	 * one class to directly access instancce variables in another class, in this
+	 * one class to directly access instance variables in another class, in this
 	 * case there is no clear and elegant alternatives.
 	 * 
 	 * @return the 10x10 array of ships.
@@ -288,18 +287,19 @@ public class Ocean implements OceanInterface {
 
 	}
 
-	public void print2() {
-		System.out.println("  0 1 2 3 4 5 6 7 8 9");
-		for (int i = 0; i <= 9; i++) {
-			System.out.print(i + " ");
-			for (int j = 0; j <= 9; j++) {
-
-				System.out.print(this.ships[i][j].toString() + " ");
-
-			}
-			System.out.print("\n");
-		}
-
-	}
+	// This is the "god mode" print (for testing)
+//	public void print2() {
+//		System.out.println("  0 1 2 3 4 5 6 7 8 9");
+//		for (int i = 0; i <= 9; i++) {
+//			System.out.print(i + " ");
+//			for (int j = 0; j <= 9; j++) {
+//
+//				System.out.print(this.ships[i][j].toString() + " ");
+//
+//			}
+//			System.out.print("\n");
+//		}
+//
+//	}
 
 }
