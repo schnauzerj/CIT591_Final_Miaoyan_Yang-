@@ -122,7 +122,6 @@ public class Ocean implements OceanInterface {
 				isHorizontal = false;
 			}
 			if (destroyer.okToPlaceShipAt(row, col, isHorizontal, this)) {
-//				System.out.println("Destroyer " + row + " " + col);
 				destroyer.setBowRow(row);
 				destroyer.setBowColumn(col);
 				destroyer.setHorizontal(isHorizontal);
