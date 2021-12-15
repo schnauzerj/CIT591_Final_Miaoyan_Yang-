@@ -120,27 +120,20 @@ public abstract class Ship extends Object {
 			if ((bowR == row) && (column >= bowC) && (column <= bowC + len - 1)) {
 //				if (this.isSunk() == false) 
 				{
-					// change the first "false" in hit[] into "true"
-					for (int i = 0; i < this.hit.length; i++) {
-						if (this.hit[i] == false) {
-							this.hit[i] = true;
-							break;
-						}
-					}
+					// change the hit[] in the tile into "true"
+					int gap = column - bowC;
+					this.hit[gap] = true;
+					return true;
 				}
 
 			}
 		} else if (this.horizontal == false) {
-
 			if ((bowC == column) && (row >= bowR) && (row <= bowR + len - 1)) {
 //				if (this.isSunk() == false) 
 				{
-					for (int i = 0; i < this.hit.length; i++) {
-						if (this.hit[i] == false) {
-							this.hit[i] = true;
-							break;
-						}
-					}
+					int gap = row - bowR;
+					this.hit[gap] = true;
+					return true;
 				}
 			}
 		}

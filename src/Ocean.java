@@ -192,7 +192,9 @@ public class Ocean implements OceanInterface {
 		shotsFired += 1;
 		Ship curNode = this.ships[row][column];
 		grid[row][column] = 1; // mark this tile as 1: has been fired
+
 		if (curNode.getShipType() != "empty" && curNode.isSunk() == false) {
+
 			curNode.shootAt(row, column);
 			hitCount += 1;
 			if (curNode.isSunk() == true) {
